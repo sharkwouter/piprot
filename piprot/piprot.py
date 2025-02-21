@@ -180,9 +180,13 @@ def get_version_and_release_date(
 
     try:
         if version:
-            if version in response["releases"]:
+            if version in response.get("releases", []):
                 release_date = response["releases"][version][0]["upload_time"]
-            else:
+            elif response.get("urls"):
+                for download in response['urls']:
+                    if download["packagetype"] == "sdist":
+                        release_date = download['upload_time']
+            if not release_date:
                 return None, None
         else:
             version = response["info"].get("stable_version")
