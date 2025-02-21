@@ -213,7 +213,7 @@ def get_version_and_release_date(
         return version, datetime.fromtimestamp(
             time.mktime(time.strptime(release_date, "%Y-%m-%dT%H:%M:%S"))
         )
-    except IndexError:
+    except (IndexError, KeyError):
         if verbose:
             print("{} ({}) didn't return a date property".format(requirement, version))
         return None, None
